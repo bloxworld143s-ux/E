@@ -1,13 +1,12 @@
 --[[
     ========================================================================
     [+] GitHub: ://github.com
-    [+] Security: Self-Contained Distribution Assembly
-    [+] Optimization: Max Compatibility Layer Override (All Games)
-    [+] Version: 3.2.0 (Production Distribution Build)
+    [+] Optimization: Max Compatibility & Layer Override (All Games)
+    [+] Feature: Built-In Execution Toast Notification
+    [+] Version: 3.3.0 (Production Build)
     ========================================================================
 ]]--
 
--- Run in pcall wrapper to guarantee no crash execution logs
 pcall(function()
     -- 1. Anti-Duplicate Self-Cleaning Routine
     local function CleanOld()
@@ -29,6 +28,7 @@ pcall(function()
     local UserInputService = S(G, "UserInputService")
     local TweenService = S(G, "TweenService")
     local RunService = S(G, "RunService")
+    local StarterGui = S(G, "StarterGui")
 
     local Player = Players.LocalPlayer
     local Camera = workspace.CurrentCamera
@@ -61,7 +61,7 @@ pcall(function()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "Universal_Screensaver_Core"
     ScreenGui.IgnoreGuiInset = true
-    ScreenGui.DisplayOrder = 2147483647 -- Highest 32-bit integer layer to override all heavy game UIs
+    ScreenGui.DisplayOrder = 2147483647 -- Highest possible 32-bit integer layer to override all heavy game UIs
     ScreenGui.ResetOnSpawn = false
     ScreenGui.Parent = TargetParent
 
@@ -138,7 +138,6 @@ pcall(function()
     task.spawn(function()
         while true do
             task.wait(0.5)
-            -- Forces layout priority override if other UI threads attempt to overlay it
             if State.Active and ScreenGui.DisplayOrder ~= 2147483647 then
                 ScreenGui.DisplayOrder = 2147483647
             end
@@ -147,5 +146,15 @@ pcall(function()
                 ShowVisuals()
             end
         end
+    end)
+
+    -- 10. Success Execution Toast Notification
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = "System Loaded",
+            Text = "Universal Screensaver & Anti-AFK is active!",
+            Duration = 5,
+            Button1 = "OK"
+        })
     end)
 end)
